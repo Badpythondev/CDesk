@@ -5,22 +5,61 @@ VisualStudioVersion = 17.13.35931.197 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CDesk", "CDesk.vcxproj", "{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CantariApp(1)", "CantariApp\", "{27086221-0671-1EE4-C0A0-74AB62C1091F}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_58684"
+		Debug.AspNetCompiler.PhysicalPath = "CantariApp\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_58684\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_58684"
+		Release.AspNetCompiler.PhysicalPath = "CantariApp\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_58684\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "58684"
+		SlnRelativePath = "CantariApp\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Debug|Any CPU.Build.0 = Debug|x64
 		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Debug|x64.ActiveCfg = Debug|x64
 		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Debug|x64.Build.0 = Debug|x64
 		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Debug|x86.ActiveCfg = Debug|Win32
 		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Debug|x86.Build.0 = Debug|Win32
+		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Release|Any CPU.ActiveCfg = Release|x64
+		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Release|Any CPU.Build.0 = Release|x64
 		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Release|x64.ActiveCfg = Release|x64
 		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Release|x64.Build.0 = Release|x64
 		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Release|x86.ActiveCfg = Release|Win32
 		{0493F987-E2BC-4B89-B2AA-33C34B40CAC1}.Release|x86.Build.0 = Release|Win32
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Debug|x64.Build.0 = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Debug|x86.Build.0 = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Release|x64.ActiveCfg = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Release|x64.Build.0 = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Release|x86.ActiveCfg = Debug|Any CPU
+		{27086221-0671-1EE4-C0A0-74AB62C1091F}.Release|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

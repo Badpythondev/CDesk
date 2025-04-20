@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curățător Cântări</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <div class="container">
+        <h1>Curățător Cântări</h1>
+        <div class="input-container">
+            <textarea id="inputText" placeholder="Introduceți textul aici..."></textarea>
+            <button onclick="cleanText()">Curăță Cântarea</button>
+        </div>
+        <h2>Cântare Curățată <button id="copyButton" onclick="copyText()">Copiază</button></h2>
+        <div id="outputText"></div>
+    </div>
+    <footer>
+        &copy; Biserica Ierusalim Oradea (Ghiță a fost un neîncrezător)
+    </footer>
+    <footer style="font-size: xx-small;">
+        Versiunea 2.0
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
