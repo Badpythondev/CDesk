@@ -1,0 +1,115 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/wil-x64-windows-1.0.240803.1-3ef6fe0a-e1b6-433c-833d-5b3eea26c61c",
+  "name": "wil:x64-windows@1.0.240803.1 7fc3ccd2fb26c5e7f656d1a774e9e95624f0904a7933e3b918d01bf4e91c5799",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-2025-04-16-f9b6c6917b23c1ccf16c1a9f015ebabf8f615045"
+    ],
+    "created": "2025-04-22T15:59:42Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "DEPENDENCY_MANIFEST_OF",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "wil",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "1.0.240803.1",
+      "downloadLocation": "git+https://github.com/microsoft/vcpkg@b9cb71d01ed196fdfae55fda3d6b0fb9f6a469fe",
+      "homepage": "https://github.com/microsoft/wil",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "The Windows Implementation Libraries (WIL) is a header-only C++ library created to make life easier for developers on Windows through readable type-safe C++ interfaces for common Windows coding patterns.",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "wil:x64-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "7fc3ccd2fb26c5e7f656d1a774e9e95624f0904a7933e3b918d01bf4e91c5799",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-0",
+      "name": "Microsoft/wil",
+      "downloadLocation": "git+https://github.com/Microsoft/wil@v1.0.240803.1",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "5701001b2c7174dafa5b7b6494b65b982245dfa31131b40542a00063b4f6d26c142c789e64b88367f5f1cdddf882780610fdf724f0bf6b3663d8ba9e3214b5b2"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./portfile.cmake",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "adffa2deab3a23526ef250b99db3ac4fa856f517ef283d82005287dd6dce2823"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./vcpkg.json",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "60d058a1af8136e9d9452b626cf6bd61ffd31e3f735f029a5b7c37f8f6d7dd1b"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

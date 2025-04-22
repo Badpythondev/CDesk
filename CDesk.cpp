@@ -14,22 +14,169 @@
 #include <WebView2.h>
 #define MAX_LOADSTRING 100
 #include <wrl.h>
-#include <wil/com.h>  
+#include <wil/com.h>
+#include <wrl/client.h>
+#include <filesystem>
+#include <thread>
+#include <iostream>
 
 
 using namespace Microsoft::WRL;
+wil::com_ptr<ICoreWebView2> g_webview;
+wil::com_ptr<ICoreWebView2Controller> g_webviewController;
+const wchar_t* webviewRuntimePath = L"Microsoft.WebView2.FixedVersionRuntime.134.0.3124.93.x64";
+const wchar_t* htmlFilePath;
+
+void EnsureFolderExists(const std::wstring& folderPath) {
+    if (!std::filesystem::exists(folderPath)) {
+        std::filesystem::create_directories(folderPath); // Creates all intermediate directories if they don't exist
+    }
+}
+
+std::wstring GetExecutableDir() {
+    wchar_t path[MAX_PATH];
+    GetModuleFileNameW(NULL, path, MAX_PATH);
+    std::filesystem::path exePath(path);
+    return exePath.parent_path().wstring();
+}
+
+std::wstring GetHtmlFilePath() {
+    std::wstring exeDir = GetExecutableDir();
+    std::filesystem::path htmlPath = std::filesystem::path(exeDir) / L"CantariApp" / L"index.html";
+    return L"file:///" + htmlPath.wstring();
+}
+
+std::wstring GetSiteFilePath(const std::wstring& filename) {
+    return (std::filesystem::path(GetExecutableDir()) / L"CantariApp" / filename).wstring();
+}
+
+
+std::vector<std::wstring> GetMissingFiles() {
+    std::vector<std::wstring> requiredFiles = {
+        L"index.html",
+        L"favicon.ico",
+        L"script.js",
+        L"styles.css"
+    };
+
+    std::vector<std::wstring> missingFiles;
+
+    for (const auto& file : requiredFiles) {
+        if (!std::filesystem::exists(GetSiteFilePath(file))) {
+            missingFiles.push_back(file);
+        }
+    }
+
+    return missingFiles;
+}
+
+void RunCommandInBackground(const std::wstring& command) {
+    // Convert the wstring to a narrow string (std::string)
+    std::string commandStr(command.begin(), command.end());
+
+    // Prepare the process startup info
+    STARTUPINFO si = {0};
+    si.cb = sizeof(si);  // Initialize the size of the structure
+    si.dwFlags = STARTF_USESHOWWINDOW;  // Control window visibility
+    si.wShowWindow = SW_HIDE;  // Hide the window (use SW_MINIMIZE for minimized)
+
+    // Prepare the process information
+    PROCESS_INFORMATION pi;
+    std::vector<wchar_t> cmdLine(command.begin(), command.end());
+    cmdLine.push_back(0);
+	// Null-terminate the command line
+    // Create the process with hidden window
+    if (!CreateProcessW(
+        NULL,
+        cmdLine.data(),     // LPWSTR
+        NULL,
+        NULL,
+        FALSE,
+        CREATE_NO_WINDOW,   // no console window
+        NULL,
+        NULL,
+        &si,
+        &pi))
+    {
+        std::wcerr << L"CreateProcessW failed: " << GetLastError() << L"\n";
+    }
+    else {
+        WaitForSingleObject(pi.hProcess, INFINITE);
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+    }
+}
+
+void DownloadMissingFilesFromGitHub() {
+    const std::wstring token = L"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";
+    const std::wstring baseUrl = L"https://api.github.com/repos/Badpythondev/CWApp/contents/CantariApp/";
+
+    // Get the missing files
+    std::vector<std::wstring> missingFiles = GetMissingFiles();
+
+    // Ensure that the target directory exists before downloading files
+    std::wstring targetDir = (std::filesystem::path(GetExecutableDir()) / L"CantariApp").wstring();
+    EnsureFolderExists(targetDir);
+
+    // If there are missing files, download them
+    for (const auto& file : missingFiles) {
+        std::wstring fullPath = GetSiteFilePath(file);
+        std::wstring command = L"curl.exe -L -H \"Authorization: token " + token + L"\" "
+            L"-H \"Accept: application/vnd.github.v3.raw\" "
+            + baseUrl + file + L" -o \"" + fullPath + L"\"";
+        std::string commandStr(command.begin(), command.end());
+        std::system(commandStr.c_str());
+    }
+}
+void dwnl_thread() {
+	DownloadMissingFilesFromGitHub();
+}
+void InitWebView(HWND hwnd) {
+    CreateCoreWebView2EnvironmentWithOptions(
+        nullptr,
+        nullptr,
+        nullptr,
+        Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
+            [hwnd](HRESULT result, ICoreWebView2Environment* env) -> HRESULT {
+                env->CreateCoreWebView2Controller(
+                    hwnd,
+                    Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                        [hwnd](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
+                            wil::com_ptr<ICoreWebView2> webview;
+                            controller->get_CoreWebView2(&webview);
+                            g_webview = webview;
+							g_webviewController = controller;
+
+                            RECT bounds;
+                            GetClientRect(hwnd, &bounds);
+                            controller->put_Bounds(bounds);
+
+                            // Load the local HTML file
+                            if (!GetMissingFiles().empty()) {
+								std::thread downloadThread(dwnl_thread);
+								downloadThread.detach();
+							    MessageBox(hwnd, L"Missing Files, Downolading", L"Info", MB_OK);
+                                //DownloadMissingFilesFromGitHub();
+                            }
+                            std::wstring htmlFilePath = GetHtmlFilePath();
+                            g_webview->Navigate(htmlFilePath.c_str());
+							//webview->Navigate(L"https://google.com");
+                            return S_OK;
+                        }).Get());
+                return S_OK;
+            }).Get());
+}
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-    // Global Variables:
-    HINSTANCE hInst;                                // current instance
+    HINSTANCE hInst;
     WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
-    WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
-
+    WCHAR szWindowClass[MAX_LOADSTRING];
     hInst = hInstance; // Store instance handle in our global variable
-    // Initialize global strings
+
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_CDESK, szWindowClass, MAX_LOADSTRING);
+
     HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
@@ -37,61 +184,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     {
         return FALSE;
     }
-
-    // Initialize WebView2
-    wil::com_ptr<ICoreWebView2Environment> webViewEnvironment;\
-    CreateCoreWebView2EnvironmentWithOptions(
-        nullptr, 
-        nullptr, 
-        nullptr,
-        Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
-            [hWnd](HRESULT result, ICoreWebView2Environment* env) -> HRESULT
-            {
-                if (SUCCEEDED(result) && env)
-                {
-                    env->CreateCoreWebView2Controller(
-                        hWnd,
-                        Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                            [hWnd](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
-                            {
-                                if (SUCCEEDED(result) && controller)
-                                {
-                                    wil::com_ptr<ICoreWebView2> webView;
-                                    controller->get_CoreWebView2(&webView);
-
-                                    // Navigate to a website
-                                    webView->Navigate(L"https://example.com");
-                                }
-                                return S_OK;
-                            }).Get());
-                }
-                return S_OK;
-            }).Get());
-        Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
-            [hWnd](HRESULT result, ICoreWebView2Environment* env) -> HRESULT
-            {
-                env->CreateCoreWebView2Controller(hWnd,
-                    Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-                        [hWnd](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
-                        {
-                            if (controller != nullptr)
-                            {
-                                wil::com_ptr<ICoreWebView2> webView;
-                                controller->get_CoreWebView2(&webView);
-
-                                // Navigate to a website
-                                webView->Navigate(L"https://example.com");
-                            }
-                            return S_OK;
-                        }).Get());
-                return S_OK;
-        }).Get();
+    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    InitWebView(hWnd);
 
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
 
     return TRUE;
 }
+
 // Global Variables:
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
@@ -211,6 +312,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
+    case WM_SIZE:
+        if (g_webviewController)
+        {
+            RECT bounds;
+            GetClientRect(hWnd, &bounds);
+            g_webviewController->put_Bounds(bounds);
+        }
+        break;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);

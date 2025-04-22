@@ -27,11 +27,9 @@
     <ClInclude Include="CDesk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="CDesk.cpp">
+    <ClInclude Include="serverspeak.h">
       <Filter>Source Files</Filter>
-    </ClCompile>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CDesk.rc">
@@ -49,5 +47,13 @@
   <ItemGroup>
     <None Include="..\CantariApp\index.html" />
     <None Include="vcpkg.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CDesk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="serverspeak.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
