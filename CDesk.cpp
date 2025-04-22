@@ -1,11 +1,97 @@
 // CDesk.cpp : Defines the entry point for the application.
 //
 
-#include "framework.h"
+
 #include "CDesk.h"
-
+#include "targetver.h"
+#define WIN32_LEAN_AND_MEAN 
+#include <Windows.h>
+#include <Unknwn.h>
+#include <stdlib.h>
+#include <malloc.h>
+#include <memory.h>
+#include <tchar.h>
+#include <WebView2.h>
 #define MAX_LOADSTRING 100
+#include <wrl.h>
+#include <wil/com.h>  
 
+
+using namespace Microsoft::WRL;
+
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+    // Global Variables:
+    HINSTANCE hInst;                                // current instance
+    WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
+    WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+
+    hInst = hInstance; // Store instance handle in our global variable
+    // Initialize global strings
+    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_CDESK, szWindowClass, MAX_LOADSTRING);
+    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+    if (!hWnd)
+    {
+        return FALSE;
+    }
+
+    // Initialize WebView2
+    wil::com_ptr<ICoreWebView2Environment> webViewEnvironment;\
+    CreateCoreWebView2EnvironmentWithOptions(
+        nullptr, 
+        nullptr, 
+        nullptr,
+        Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
+            [hWnd](HRESULT result, ICoreWebView2Environment* env) -> HRESULT
+            {
+                if (SUCCEEDED(result) && env)
+                {
+                    env->CreateCoreWebView2Controller(
+                        hWnd,
+                        Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                            [hWnd](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
+                            {
+                                if (SUCCEEDED(result) && controller)
+                                {
+                                    wil::com_ptr<ICoreWebView2> webView;
+                                    controller->get_CoreWebView2(&webView);
+
+                                    // Navigate to a website
+                                    webView->Navigate(L"https://example.com");
+                                }
+                                return S_OK;
+                            }).Get());
+                }
+                return S_OK;
+            }).Get());
+        Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
+            [hWnd](HRESULT result, ICoreWebView2Environment* env) -> HRESULT
+            {
+                env->CreateCoreWebView2Controller(hWnd,
+                    Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                        [hWnd](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT
+                        {
+                            if (controller != nullptr)
+                            {
+                                wil::com_ptr<ICoreWebView2> webView;
+                                controller->get_CoreWebView2(&webView);
+
+                                // Navigate to a website
+                                webView->Navigate(L"https://example.com");
+                            }
+                            return S_OK;
+                        }).Get());
+                return S_OK;
+        }).Get();
+
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
+
+    return TRUE;
+}
 // Global Variables:
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
@@ -93,7 +179,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //        In this function, we save the instance handle in a global variable and
 //        create and display the main program window.
 //
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+/*BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
 
@@ -109,7 +195,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    UpdateWindow(hWnd);
 
    return TRUE;
-}
+}*/
 
 //
 //  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)

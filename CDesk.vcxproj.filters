@@ -47,7 +47,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="..\CantariApp\index.html" />
+    <None Include="vcpkg.json" />
   </ItemGroup>
 </Project>

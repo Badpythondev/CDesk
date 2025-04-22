@@ -17,8 +17,6 @@ function copyText() {
     textarea.select();
     try {
         navigator.clipboard.writeText(textarea.value);
-        //document.execCommand('copy');
-        alert('Textul a fost copiat!');
     } catch (err) {
         alert('Copierea textului a eșuat.');
     }

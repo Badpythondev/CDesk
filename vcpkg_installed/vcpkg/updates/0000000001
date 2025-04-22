@@ -1,0 +1,8 @@
+Package: webview2
+Version: 1.0.2277.86
+Depends: wil
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 5f6217b3c0a68d1fac5c47ac1b7b0f4ccbb9c9bed031f11af2116ee6acd0b5cc
+Description: The WebView2 control allows you to embed web technologies (HTML, CSS, and JavaScript) using Microsoft Edge
+Status: install ok installed
