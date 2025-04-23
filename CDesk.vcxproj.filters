@@ -27,9 +27,6 @@
     <ClInclude Include="CDesk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="serverspeak.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CDesk.rc">
@@ -50,9 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDesk.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="serverspeak.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

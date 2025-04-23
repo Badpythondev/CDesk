@@ -169,6 +169,7 @@ void InitWebView(HWND hwnd) {
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
+    SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
     HINSTANCE hInst;
     WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
     WCHAR szWindowClass[MAX_LOADSTRING];
